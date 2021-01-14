@@ -15,7 +15,7 @@ const setMeses = (fecha) => {
     "Diciembre",
   ];
 
-  let modifyFecha = fecha.dateString.split("-");
+  let modifyFecha = fecha.split("-");
   let modifymes =
     modifyFecha[1][0] === "0" ? modifyFecha[1][1] - 1 : modifyFecha[1];
   return `${modifyFecha[2]} de ${meses[modifymes]}`;

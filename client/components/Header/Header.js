@@ -17,7 +17,7 @@ export default function Header() {
       >
         <Image
           source={
-            userDB.usuarios[0].imagen.id
+            userDB && userDB.usuarios[0].imagen
               ? { uri: userDB.usuarios[0].imagen }
               : image
           }

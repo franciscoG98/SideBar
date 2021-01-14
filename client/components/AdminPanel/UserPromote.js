@@ -15,7 +15,7 @@ import {
 
 export default function UserPromote({ navigation }) {
   const [search, setSearch] = useState("");
-
+  let image = require("../images/bag.png");
   const bool = {};
 
   const QUERY = gql`
@@ -106,7 +106,9 @@ export default function UserPromote({ navigation }) {
                     <View style={styles.eventContainer}>
                       <View style={styles.imgContainer}>
                         <Image
-                          source={usuario.imagen}
+                          source={
+                            usuario.imagen ? { uri: usuario.imagen } : image
+                          }
                           style={styles.image}
                         ></Image>
                       </View>
@@ -199,13 +201,14 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    flex: 1,
     resizeMode: "cover",
-    height: 40,
-    width: 40,
+    height: 50,
+    width: 50,
     borderRadius: 70,
     marginRight: 15,
     margin: 7,
+    borderColor: "white",
+    borderWidth: 1,
   },
   titulo: {
     fontFamily: "Roboto_400Regular",
@@ -235,5 +238,9 @@ const styles = StyleSheet.create({
     color: "grey",
     marginLeft: 20,
     marginTop: 20,
+  },
+  imgContainer: {
+    flex: 2,
+    alignItems: "center",
   },
 });

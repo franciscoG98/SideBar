@@ -84,6 +84,7 @@ export default function DeleteEvent({ navigation }) {
                         },
                       },
                     })
+                      //  .then((ans) => alert("Seguro que desea eliminar?"))
                       .then((ans) => alert("Congreso eliminado"))
                       .catch((err) => alert(err));
                     refetch();
@@ -149,10 +150,10 @@ const styles = StyleSheet.create({
     color: "#dedede",
   },
   titulo: {
-    fontFamily: "Roboto_400Regular",
-    fontSize: 16,
     marginBottom: 10,
-    color: "#454444",
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+    color: "#7C88D5",
   },
   titulo2: {
     fontFamily: "Roboto_400Regular",

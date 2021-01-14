@@ -16,7 +16,7 @@ const MUTATION = gql`
 const FechaSeleccionada = ({ route, navigation }) => {
   const [deleteTarea] = useMutation(MUTATION);
   let { data, fecha } = route.params;
-  let array = [...data.congresos, ...data.tareas];
+  let array = [...data.congresos, ...data.tareas, ...data.fechasImportantes];
   let { dateString } = fecha;
   let arreglo = [];
   array.map((fecha) =>
@@ -25,6 +25,11 @@ const FechaSeleccionada = ({ route, navigation }) => {
     )
   );
 
+  let key = 0;
+  function setId() {
+    key = key + 1;
+    return key;
+  }
   function borrarTarea(id) {
     deleteTarea({
       variables: {
@@ -43,39 +48,64 @@ const FechaSeleccionada = ({ route, navigation }) => {
       <View style={styles.header}>
         <Text style={styles.headerText}>{setMeses(fecha)}</Text>
       </View>
-      <ScrollView>
-        {arreglo.map((congreso) => (
-          <>
-            {congreso.__typename === "Tarea" ? (
-              <View key={congreso._id} style={styles.card2}>
-                <View style={styles.column}>
-                  <Text style={styles.titulo}>{congreso.titulo}</Text>
-                  <Text style={styles.descripcion}>{congreso.descripcion}</Text>
+      <View style={styles.contTareas}>
+        <ScrollView>
+          {arreglo.map((congreso) => (
+            <View key={setId()}>
+              {congreso.__typename === "Tarea" ? (
+                <View style={styles.card2}>
+                  <View style={styles.column}>
+                    <Text style={styles.titulo}>{congreso.titulo}</Text>
+                    <Text style={styles.descripcion}>
+                      {congreso.descripcion}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.tacho}
+                    onPress={() => borrarTarea(congreso._id)}
+                  >
+                    <BinIcon name="new" color="grey" size="32" />
+                  </TouchableOpacity>
                 </View>
+              ) : congreso.__typename === "FechasImportantes" ? (
                 <TouchableOpacity
-                  style={styles.tacho}
-                  onPress={() => borrarTarea(congreso._id)}
+                  style={styles.card1}
+                  onPress={() =>
+                    navigation.navigate("FechasImportantesCard", {
+                      id: congreso._id,
+                      titulo: congreso.titulo,
+                      fecha: congreso.fecha,
+                      descripcion: congreso.descripcion,
+                      imagen: congreso.imagen,
+                    })
+                  }
                 >
-                  <BinIcon name="new" color="grey" size="32" />
+                  <View style={styles.column}>
+                    <Text style={styles.titulo}>{congreso.titulo}</Text>
+                    <Text style={styles.descripcion}>
+                      {congreso.descripcion}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                key={congreso._id}
-                style={styles.card}
-                onPress={() =>
-                  navigation.navigate("Detail", { id: congreso._id })
-                }
-              >
-                <View style={styles.column}>
-                  <Text style={styles.titulo}>{congreso.titulo}</Text>
-                  <Text style={styles.descripcion}>{congreso.descripcion}</Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          </>
-        ))}
-      </ScrollView>
+              ) : (
+                <TouchableOpacity
+                  style={styles.card}
+                  onPress={() =>
+                    navigation.navigate("Detail", { id: congreso._id })
+                  }
+                >
+                  <View style={styles.column}>
+                    <Text style={styles.titulo}>{congreso.titulo}</Text>
+                    <Text style={styles.descripcion}>
+                      {congreso.descripcion}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      </View>
       <TouchableOpacity
         style={styles.agregarTarea}
         onPress={() => navigation.navigate("AgregarTarea", { fecha: fecha })}

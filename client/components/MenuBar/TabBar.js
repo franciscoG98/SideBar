@@ -4,16 +4,20 @@ import AgendaIcon from "../images/AgendaIcon";
 import Bookmark from "../images/Bookmark";
 import ChatIcon from "../images/ChatIcon";
 import LinkIcon from "../images/LinkIcon";
+import HomeIcon from "../images/HomeIcon";
+import AdminIcon from "../images/AdminIcon";
+import BurgerMenuIcon from "../images/BurgerMenuIcon";
+
 import EventCard from "../Event/EventCard";
 import Calendar from "../Calendario/index";
-
-import UnderConstruction from "../UnderConstruction";
+// import UnderConstruction from "../UnderConstruction";
 import Home from "../Home";
-import HomeIcon from "../images/HomeIcon";
 import ChatCard from "../Chat/ChatCard";
-import AdminIcon from "../images/AdminIcon";
 import AdminPanel from "../AdminPanel/AdminPanel";
-import InterestLinks from ".././LinkInteres/InterestLinks";
+// import InterestLinks from ".././LinkInteres/InterestLinks";
+import InterestLinks from "../LinkInteres/InterestLinks";
+
+import SideBar from "../SideBar/index";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +37,16 @@ export default function MyTabs() {
         },
       }}
     >
+      <Tab.Screen
+        name="SideBar"
+        component={SideBar}
+        options={{
+          tabBarLabel: "SideBar",
+          tabBarIcon: ({ color, size }) => (
+            <BurgerMenuIcon name="home" color="white" size="32" />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Home"
         component={Home}

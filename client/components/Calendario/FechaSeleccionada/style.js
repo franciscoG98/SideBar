@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
     paddingBottom: "15%",
     paddingTop: "30%",
   },
+  contTareas: {
+    height: "90%",
+  },
   header: {
     position: "absolute",
     marginBottom: 10,
@@ -23,7 +26,7 @@ const styles = StyleSheet.create({
   agregarTarea: {
     width: "100%",
     height: "10%",
-    bottom: 0,
+    bottom: 25,
     backgroundColor: "#454444",
     justifyContent: "center",
     alignItems: "center",
@@ -61,6 +64,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     color: "black",
     backgroundColor: "#6fbded",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    margin: 10,
+    borderRadius: 10,
+  },
+  card1: {
+    width: "90%",
+    padding: 10,
+    height: "auto",
+    flexDirection: "row",
+    color: "black",
+    backgroundColor: "orange",
     alignItems: "flex-start",
     justifyContent: "space-between",
     margin: 10,

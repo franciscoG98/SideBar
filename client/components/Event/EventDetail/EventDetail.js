@@ -20,6 +20,8 @@ import scroll from "../../../styles/scroll";
 import InputAnswer from "./InputAnswer";
 import InputQuestion from "./InputQuestion";
 import useUser from "../../Users/useUser";
+import meses from "./../EventCrud/Meses";
+import Header from "../../Header/Header";
 const image = {
   uri:
     "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
@@ -41,7 +43,11 @@ export default function EventDetail({ route, navigation }) {
     usuarioId: userDB.usuarios[0]._id,
     asistire: true,
   };
-
+  const [value, setValue] = useState({
+    pregunta: "",
+    congresoId: "",
+    resupuesta: "",
+  });
   const ASISTENCIA = gql`
     mutation asistencia($input: AsistenciaInput) {
       addAsistencia(input: $input) {
@@ -105,160 +111,172 @@ export default function EventDetail({ route, navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <ScrollView style={styles.scroll}>
-        <TouchableOpacity
-          style={styles.buttonSend}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-        <View style={styles.eventContainer}>
-          <View style={styles.eventImg}>
-            <Image
-              source={
-                data.congreso.imagen
-                  ? { uri: `${data.congreso.imagen}` }
-                  : image
-              }
-              style={styles.image}
-            ></Image>
-          </View>
-          <View style={styles.detail}>
-            <Text style={styles.titulo}>{data.congreso.titulo}</Text>
-            <Text style={{ display: "none" }}>
-              {(fecha = data.congreso.fecha[0].split("T"))}
-            </Text>
-            <Text style={styles.text}>
-              Inicio: {fecha[0]} {fecha[1].slice(0, 5).concat(" hs")}
-            </Text>
-            <Text style={{ display: "none" }}>
-              {
-                (fechaF = data.congreso.fecha[
-                  data.congreso.fecha.length - 1
-                ].split("T"))
-              }
-            </Text>
-            <Text style={styles.text}>
-              Finalización: {fechaF[0]} {fecha[1].slice(0, 5).concat(" hs")}
-            </Text>
-            <Text style={styles.text}> Lugar: {data.congreso.ubicacion}</Text>
-            <Text style={styles.text}>{data.congreso.descripcion}</Text>
-            <Text style={styles.text}>
-              Modalidad: {data.congreso.modalidad}
-            </Text>
-            <Text style={styles.text}>
-              {data.congreso.asistencias.length === 1
-                ? " 1 persona asistirá"
-                : ` ${data.congreso.asistencias.length} personas asistirán`}
-            </Text>
-          </View>
-
-          <View style={styles.buttonCont}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setQuestion(!question)}
-            >
-              <Text style={styles.buttonText}> Consultas </Text>
-            </TouchableOpacity>
-            {data.congreso.asistencias.some(
-              (e) => e.usuarioId === asiste.usuarioId
-            ) ? (
-              <TouchableOpacity
-                style={styles.button1}
-                onPress={async () => {
-                  await deleteasistencia({ variables: { input: asiste } });
-                  refetch();
-                }}
-              >
-                <Text style={styles.buttonText}> No Asistiré </Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.button1}
-                onPress={async () => {
-                  await addasistencia({ variables: { input: asiste } });
-                  refetch();
-                }}
-              >
-                <Text style={styles.buttonText}> Asistiré </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <>
-            {question ? (
-              <>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setInsertar(!insertar)}
-                >
-                  <Text style={styles.buttonText}> Añadir una consulta </Text>
-                </TouchableOpacity>
-                {insertar ? (
-                  <>
-                    <InputQuestion
-                      id={id}
-                      refetch={refetch}
-                      insertar={insertar}
-                      setInsertar={setInsertar}
-                    />
-                  </>
-                ) : null}
-              </>
-            ) : null}
-            {question ? (
-              data.congreso.preguntas.length ? (
-                data.congreso.preguntas.map((p) => (
-                  <View style={styles.details}>
-                    <Text key={p._id} style={styles.texto}>
-                      {p.pregunta}
-                    </Text>
-                    <Text style={styles.text}>
-                      {p.resupuesta ? p.resupuesta : "No hay respuesta"}
-                    </Text>
-                    {userDB.usuarios[0].rol === "Mod" && !p.resupuesta ? (
-                      <TouchableOpacity
-                        style={styles.buttonResp}
-                        onPress={() => {
-                          setAnswer(!answer),
-                            setRespuesta({
-                              _id: p._id,
-                              pregunta: p.pregunta,
-                              resupuesta: "",
-                            });
-                        }}
-                      >
-                        <Text style={styles.buttonText}>Responder</Text>
-                      </TouchableOpacity>
-                    ) : null}
-                  </View>
-                ))
-              ) : (
-                <View style={styles.detail}>
-                  <Text style={styles.texto}>
-                    Este evento aun no tiene consultas
-                  </Text>
-                </View>
-              )
-            ) : null}
-          </>
-          {answer ? (
-            <InputAnswer
-              respuesta={respuesta}
-              setAnswer={setAnswer}
-              answer={answer}
-              setRespuesta={setRespuesta}
-              value={value}
-              refetch={refetch}
-            />
-          ) : null}
+      <View style={styles.total}>
+        <Header></Header>
+        <View style={styles.view}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackIcon color="grey" size="32" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Detalle de Congreso</Text>
         </View>
-      </ScrollView>
+        <ScrollView style={styles.scroll2}>
+          <View style={styles.eventContainer}>
+            <View style={styles.eventImg}>
+              <Image
+                source={
+                  data.congreso.imagen
+                    ? { uri: `${data.congreso.imagen}` }
+                    : image
+                }
+                style={styles.image}
+              ></Image>
+            </View>
+            <View style={styles.detail}>
+              <Text style={styles.titulo}>{data.congreso.titulo}</Text>
+              <Text style={{ display: "none" }}>
+                {(fecha = data.congreso.fecha[0].split("T"))}
+              </Text>
+              <Text style={styles.text}>
+                Inicio: {`${meses(fecha[0])} a las ${fecha[1]} hs.`}
+              </Text>
+              <Text style={{ display: "none" }}>
+                {
+                  (fechaF = data.congreso.fecha[
+                    data.congreso.fecha.length - 1
+                  ].split("T"))
+                }
+              </Text>
+              <Text style={styles.text}>
+                Finalización: {`${meses(fechaF[0])} a las ${fecha[2]} hs.`}
+              </Text>
+              <Text style={styles.text}>Lugar: {data.congreso.ubicacion}</Text>
+              <Text style={styles.text}>{data.congreso.descripcion}</Text>
+              <Text style={styles.text}>
+                Modalidad: {data.congreso.modalidad}
+              </Text>
+              <Text style={styles.text}>
+                {data.congreso.asistencias.length === 1
+                  ? " 1 persona asistirá"
+                  : ` ${data.congreso.asistencias.length} personas asistirán`}
+              </Text>
+            </View>
+
+            <View style={styles.buttonCont}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setQuestion(!question)}
+              >
+                <Text style={styles.buttonText}> Consultas </Text>
+              </TouchableOpacity>
+              {data.congreso.asistencias.some(
+                (e) => e.usuarioId === asiste.usuarioId
+              ) ? (
+                <TouchableOpacity
+                  style={styles.button1}
+                  onPress={async () => {
+                    await deleteasistencia({ variables: { input: asiste } });
+                    refetch();
+                  }}
+                >
+                  <Text style={styles.buttonText}> No Asistiré </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.button1}
+                  onPress={async () => {
+                    await addasistencia({ variables: { input: asiste } });
+                    refetch();
+                  }}
+                >
+                  <Text style={styles.buttonText}> Asistiré </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <>
+              {question ? (
+                <>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => setInsertar(!insertar)}
+                  >
+                    <Text style={styles.buttonText}> Añadir una consulta </Text>
+                  </TouchableOpacity>
+                  {insertar ? (
+                    <>
+                      <InputQuestion
+                        id={id}
+                        refetch={refetch}
+                        insertar={insertar}
+                        setInsertar={setInsertar}
+                      />
+                    </>
+                  ) : null}
+                </>
+              ) : null}
+              {question ? (
+                data.congreso.preguntas.length ? (
+                  data.congreso.preguntas.map((p) => (
+                    <View key={p._id} style={styles.details}>
+                      <Text style={styles.texto}>{p.pregunta}</Text>
+                      <Text style={styles.text}>
+                        {p.resupuesta ? p.resupuesta : "No hay respuesta"}
+                      </Text>
+                      {userDB.usuarios[0].rol === "Mod" && !p.resupuesta ? (
+                        <TouchableOpacity
+                          style={styles.buttonResp}
+                          onPress={() => {
+                            setAnswer(!answer),
+                              setRespuesta({
+                                _id: p._id,
+                                pregunta: p.pregunta,
+                                resupuesta: "",
+                              });
+                          }}
+                        >
+                          <Text style={styles.buttonText}>Responder</Text>
+                        </TouchableOpacity>
+                      ) : null}
+                    </View>
+                  ))
+                ) : (
+                  <View style={styles.detail}>
+                    <Text style={styles.texto}>
+                      Este evento aun no tiene consultas
+                    </Text>
+                  </View>
+                )
+              ) : null}
+            </>
+            {answer ? (
+              <InputAnswer
+                respuesta={respuesta}
+                setAnswer={setAnswer}
+                answer={answer}
+                setRespuesta={setRespuesta}
+                value={value}
+                refetch={refetch}
+              />
+            ) : null}
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   scroll,
+  total: {
+    width: "100%",
+    height: "100%",
+  },
+
+  view: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 10,
+    marginTop: 30,
+  },
   eventContainer: {
     width: "100%",
     marginTop: 10,
@@ -331,7 +349,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#ffffff",
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "center",
   },
   buttonSend: {
@@ -366,5 +384,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: 10,
     marginRight: 10,
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+  },
+  scroll2: {
+    width: "96%",
+    height: "68%",
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginBottom: 10,
+    padding: 2,
   },
 });

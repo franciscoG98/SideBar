@@ -17,6 +17,7 @@ import { AppLoading } from "expo";
 import { gql, useMutation } from "@apollo/client";
 import Header from "../Header/Header";
 import BackIcon from "../images/BackIcon";
+import { ScrollView } from "react-native-gesture-handler";
 
 const MUTATION = gql`
   mutation addLink($input: LinkInput) {
@@ -66,6 +67,7 @@ export default function createLinks({ navigation }) {
           </TouchableOpacity>
           <Text style={styles.title}> Crear Link </Text>
         </View>
+
         <Formik
           initialValues={{
             titulo: "",
@@ -106,13 +108,14 @@ export default function createLinks({ navigation }) {
                   value={values.link}
                 />
               </View>
-
-              <TouchableOpacity
-                style={styles.buttonText1}
-                onPress={(e) => handleSubmit(e)}
-              >
-                <Text style={styles.texto}>Crear</Text>
-              </TouchableOpacity>
+              <View style={styles.div}>
+                <TouchableOpacity
+                  style={styles.buttonText1}
+                  onPress={(e) => handleSubmit(e)}
+                >
+                  <Text style={styles.texto}>Crear</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </Formik>
@@ -139,17 +142,10 @@ const styles = StyleSheet.create({
     borderColor: "#f5f2f2",
     borderRadius: 20,
   },
-  title: {
-    fontFamily: "Roboto_400Regular",
-    fontSize: 18,
-    marginTop: 20,
-    marginBottom: 10,
-    textAlign: "center",
-    color: "#7C88D5",
-  },
+
   titulo: {
     fontFamily: "Roboto_500Medium",
-    fontSize: 15,
+    fontSize: 18,
     marginTop: 20,
     marginBottom: 10,
     color: "#7C88D5",
@@ -173,19 +169,21 @@ const styles = StyleSheet.create({
   buttonText1: {
     fontFamily: "Roboto_500Medium",
     backgroundColor: "#7C88D5",
-    padding: 5,
+    padding: 8,
     width: 150,
     textAlign: "center",
     borderRadius: 10,
-    /*height: 30,*/
+    height: 35,
     textAlign: "center",
-
     margin: 10,
   },
   texto: {
     color: "white",
     fontFamily: "Roboto_500Medium",
-    fontSize: 15,
+    fontSize: 18,
     textAlign: "center",
+  },
+  div: {
+    alignItems: "center",
   },
 });

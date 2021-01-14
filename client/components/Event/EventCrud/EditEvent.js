@@ -109,7 +109,7 @@ export default function EditEvent({ navigation, route }) {
             {({ handleChange, handleBlur, handleSubmit, values }) => (
               <ScrollView style={styles.scroll}>
                 <View style={styles.inputGroup}>
-                  <Text>Titulo</Text>
+                  <Text style={styles.inputTitle}>Titulo</Text>
                   <TextInput
                     style={styles.texto2}
                     onChangeText={handleChange("titulo")}
@@ -120,7 +120,7 @@ export default function EditEvent({ navigation, route }) {
                 </View>
 
                 <View style={styles.inputGroup}>
-                  <Text>Descripción</Text>
+                  <Text style={styles.inputTitle}>Descripción</Text>
                   <TextInput
                     style={styles.texto2}
                     onChangeText={handleChange("descripcion")}
@@ -130,7 +130,7 @@ export default function EditEvent({ navigation, route }) {
                   />
                 </View>
                 <View style={styles.inputGroup}>
-                  <Text>Ubicacion</Text>
+                  <Text style={styles.inputTitle}>Ubicacion</Text>
                   <TextInput
                     style={styles.texto2}
                     onChangeText={handleChange("ubicacion")}
@@ -140,7 +140,7 @@ export default function EditEvent({ navigation, route }) {
                   />
                 </View>
                 <View style={styles.inputGroup}>
-                  <Text>Especialidad</Text>
+                  <Text style={styles.inputTitle}>Especialidad</Text>
                   <TextInput
                     style={styles.texto2}
                     onChangeText={handleChange("especialidad")}
@@ -150,7 +150,7 @@ export default function EditEvent({ navigation, route }) {
                   />
                 </View>
                 <View style={styles.inputGroup}>
-                  <Text>Fechas</Text>
+                  <Text style={styles.inputTitle}>Fechas</Text>
                   <TextInput
                     style={styles.texto2}
                     onChangeText={handleChange("fecha")}
@@ -209,11 +209,19 @@ const styles = StyleSheet.create({
     color: "#7C88D5",
   },
   inputGroup: {
+    /*flex: 1,*/
     padding: 5,
+    /*marginLeft: 5,
+    marginRight: 5,*/
     marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
-    height: 60,
+  },
+  inputTitle: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+    marginBottom: 10,
+    color: "#7C88D5",
   },
   buttonText: {
     marginLeft: 10,

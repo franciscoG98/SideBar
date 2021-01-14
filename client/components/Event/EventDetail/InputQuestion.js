@@ -45,11 +45,12 @@ const InputQuestion = ({ id, insertar, setInsertar, refetch }) => {
             <TextInput
               style={{
                 height: 30,
-                borderBottom: "solid 1px #d9d9d9",
+                borderColor: "#d9d9d9",
                 borderWidth: 1,
                 marginLeft: 20,
                 marginRight: 20,
-                width: 200,
+                width: 220,
+                borderRadius: 5,
               }}
               name={value.pregunta}
               onChangeText={handleChange}
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
     padding: 35,
     alignItems: "center",
     shadowColor: "#000",
+    width: "75%",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -120,14 +122,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#ffffff",
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "center",
-    height: 15,
   },
   buttonSend: {
     //flex: 1,
     backgroundColor: "#7C88D5",
-    borderRadius: 10,
+    borderRadius: 5,
     marginTop: 12,
     marginBottom: 10,
     marginLeft: 10,
@@ -135,7 +136,8 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 5,
     paddingRight: 5,
-    width: 60,
+    width: 100,
+    height: 30,
   },
 });
 

@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { AppLoading } from "expo";
 import useUser from "../components/Users/useUser";
 import { gql, useQuery, useMutation } from "@apollo/client";
+// import { Notifications } from "expo";
 import * as Notifications from "expo-notifications";
+
 import * as Permissions from "expo-permissions";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import {
@@ -12,10 +14,11 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 import Header from "./Header/Header";
-import { Image } from "react-native";
+import { Image, ScrollView } from "react-native";
+
 const image = {
   main_logo: require("./images/visitar.png"),
-  doc: require("./images/doc1.png"),
+  doc: require("./images/doc2.png"),
   logo: require("./images/logoblanco.png"),
 };
 const QUERY = gql`
@@ -58,26 +61,22 @@ export default function Home() {
     },
   });
   data && setUserDB(data);
-
   const [updateToken] = useMutation(EXPOTOKEN);
 
-  async function registerForPushNotification() {
-    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    if (status != "granted") {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  const registerForPushNotifications = async () => {
+    try {
+      const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (!permission.granted) return;
+      const token = await Notifications.getExpoPushTokenAsync();
+      return token;
+    } catch (error) {
+      console.log("Error getting a token", error);
     }
-    if (status !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    // token = (await Notifications.getDevicePushTokenAsync()).data;
-    return token;
-  }
+  };
 
   useEffect(() => {
     userDB &&
-      registerForPushNotification()
+      registerForPushNotifications()
         .then((token) =>
           updateToken({
             variables: {
@@ -97,7 +96,7 @@ export default function Home() {
     return <AppLoading />;
   } else {
     return (
-      <>
+      <ScrollView>
         <ImageBackground source={image.doc} style={styles.image}>
           <Image
             source={image.logo}
@@ -117,7 +116,7 @@ export default function Home() {
             </Text>
           </View>
         </ImageBackground>
-      </>
+      </ScrollView>
     );
   }
 }
@@ -170,14 +169,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 338,
     padding: 15,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderTopRightRadius: 40,
   },
   text: {
     marginTop: 10,
-    fontFamily: "Roboto_400Regular",
+    fontFamily: "Roboto_500Medium",
     width: "100%",
-    color: "white",
+    color: "#565957",
     fontSize: 18,
   },
   text2: {
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_100Thin",
     fontSize: 15,
     textAlign: "justify",
-    color: "white",
+    color: "#565957",
   },
   logo: {
     width: 200,

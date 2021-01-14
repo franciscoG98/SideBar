@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
+import meses from "./EventCrud/Meses";
 import {
   StyleSheet,
   ScrollView,
@@ -35,7 +36,12 @@ export const QUERY = gql`
 `;
 export default function EventCard({ navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
-  useEffect(async () => await refetch(), []);
+  useEffect(() => {
+    async function aux() {
+      await refetch();
+    }
+    aux();
+  }, []);
   var fecha;
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
@@ -60,7 +66,7 @@ export default function EventCard({ navigation }) {
                   {(fecha = congreso.fecha[0].split("T"))}
                 </Text>
                 <Text style={styles.text}>
-                  {fecha[0]} {fecha[1].slice(0, 5).concat(" hs")}
+                  {`${meses(fecha[0])} a las ${fecha[1]} hs.`}
                 </Text>
                 <Text style={styles.text}>{congreso.ubicacion} </Text>
                 <TouchableOpacity

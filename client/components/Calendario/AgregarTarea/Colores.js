@@ -1,4 +1,4 @@
-/* import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
 
@@ -66,25 +66,25 @@ export default function Colores({ seleccionado }) {
         onPress={() => seleccionado("purple")}
       />
       <TouchableOpacity
-        style={style.gainsboro}
-        key="gainsboro"
-        onPress={() => seleccionado("gainsboro")}
-      />
-      <TouchableOpacity
         style={style.gray}
         key="gray"
-        onPress={() => seleccionado("gray")}
+        onPress={() => seleccionado("#f0b1f2")}
+      />
+      <TouchableOpacity
+        style={style.gainsboro}
+        key="gainsboro"
+        onPress={() => seleccionado("#24b39e")}
       />
       <TouchableOpacity
         style={style.dimgray}
         key="dimgray"
-        onPress={() => seleccionado("dimgray")}
+        onPress={() => seleccionado("#664b1a")}
       />
       <TouchableOpacity
         style={style.black}
         key="black"
         name="black"
-        onPress={() => seleccionado("black")}
+        onPress={() => seleccionado("#0f0b85")}
       />
     </View>
   );
@@ -202,7 +202,7 @@ const style = StyleSheet.create({
   gainsboro: {
     height: 30,
     width: 30,
-    backgroundColor: "gainsboro",
+    backgroundColor: "#24b39e",
     margin: 2,
 
     borderRadius: 2,
@@ -210,7 +210,7 @@ const style = StyleSheet.create({
   black: {
     height: 30,
     width: 30,
-    backgroundColor: "black",
+    backgroundColor: "#0f0b85",
     margin: 2,
 
     borderRadius: 2,
@@ -218,7 +218,7 @@ const style = StyleSheet.create({
   dimgray: {
     height: 30,
     width: 30,
-    backgroundColor: "dimgray",
+    backgroundColor: "#664b1a",
     margin: 2,
 
     borderRadius: 2,
@@ -226,10 +226,9 @@ const style = StyleSheet.create({
   gray: {
     height: 30,
     width: 30,
-    backgroundColor: "gray",
+    backgroundColor: "#f0b1f2",
     margin: 2,
 
     borderRadius: 2,
   },
 });
- */

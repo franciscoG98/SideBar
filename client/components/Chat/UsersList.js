@@ -19,6 +19,18 @@ import BackIcon from "../images/BackIcon";
 import { TextInput } from "react-native-gesture-handler";
 import Header from "../Header/Header";
 
+/*const QUERY = gql`
+  query usuarios {
+    usuarios {
+      nombre
+      apellido
+      imagen
+      _id
+      expoToken
+    }
+  }
+`;*/
+
 const QUERY = gql`
   query usuarios($where: JSON) {
     usuarios(where: $where) {
@@ -28,16 +40,50 @@ const QUERY = gql`
       laboratorio
       imagen
       _id
+      rol
+      email
     }
   }
 `;
-
+/* const QUERY = gql`
+  query usuarios($where: JSON) {
+    usuarios {
+      nombre
+      apellido
+      especialidad
+      laboratorio
+      imagen
+      _id
+    }
+  }
+`;
+ */
 export default function UsersList({ navigation }) {
   const [search, setSearch] = useState("");
   let image = require("../images/bag.png");
-  const { loading, data, error, refetch } = useQuery(QUERY, {
+  /*const { loading, data, error, refetch } = useQuery(QUERY);*/
+  /*   const { loading, data, error, refetch } = useQuery(QUERY, {
     variables: {
       where: { rol: "User", nombre: { $regex: `.*${search}.*` } },
+    },
+  }); */
+
+  const { loading, data, refetch } = useQuery(QUERY, {
+    variables: {
+      where: {
+        $or: [{ rol: "User" }, { rol: "Mod" }],
+        $or: [
+          { nombre: { $regex: `.*${search.trim()}.*` } },
+          { nombre: { $regex: `.*${search.toLowerCase().trim()}.*` } },
+          { nombre: { $regex: `.*${search.toUpperCase().trim()}.*` } },
+          { apellido: { $regex: `.*${search.trim()}.*` } },
+          { apellido: { $regex: `.*${search.toLowerCase().trim()}.*` } },
+          { apellido: { $regex: `.*${search.toUpperCase().trim()}.*` } },
+        ],
+        /*{ nombre: { $regex: `.*${search.toLowerCase()}.*` } },*/
+
+        /* { apellido: { $regex: `.*${search.toLowerCase()}.*` } },*/
+      },
     },
   });
 
@@ -51,16 +97,16 @@ export default function UsersList({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <View>
+      <View style={styles.total}>
         <Header></Header>
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => navigation.goBack()}
+        >
+          <BackIcon name="back" color="grey" size="24" />
+        </TouchableOpacity>
         <Text style={styles.title}>Nuevo Mensaje</Text>
         <View style={styles.inputCont}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => navigation.goBack()}
-          >
-            <BackIcon name="back" color="grey" size="24" />
-          </TouchableOpacity>
           <TextInput
             placeholder="Buscar..."
             onChangeText={(search) => setSearch(search)}
@@ -85,18 +131,19 @@ export default function UsersList({ navigation }) {
                     onPress={() =>
                       navigation.navigate("ChatDetail", {
                         id: usuario._id,
-                        nombre: usuario.nombre,
-                        apellido: usuario.apellido,
+                        nombre: usuario.nombre + " " + usuario.apellido,
                         imagen: usuario.imagen,
-                        especialidad: usuario.especialidad,
-                        laboratorio: usuario.laboratorio,
+                        vacio: true,
+                        expoToken: usuario.expoToken,
                       })
                     }
                   >
                     <View style={styles.eventContainer}>
                       <View style={styles.imgContainer}>
                         <Image
-                          source={usuario.imagen ? usuario.imagen : image}
+                          source={
+                            usuario.imagen ? { uri: usuario.imagen } : image
+                          }
                           style={styles.image}
                         ></Image>
                       </View>
@@ -122,6 +169,10 @@ export default function UsersList({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  total: {
+    width: "100%",
+    height: "100%",
+  },
   container: {
     width: "96%",
     height: "70%",
